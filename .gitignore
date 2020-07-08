@@ -1,0 +1,9 @@
+### COMPOSER
+
+vendor
+composer.lock
+composer.phar
+
+### JETBRAINS
+
+.idea

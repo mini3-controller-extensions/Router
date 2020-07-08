@@ -1,0 +1,21 @@
+{
+  "name": "mini3-controller-extensions/router",
+  "description": "mini3 controller extension for easier HTTP redirects",
+  "minimum-stability": "stable",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Emanuel Bitkov",
+      "email": "crystlbrd@bitkov.de"
+    }
+  ],
+  "require": {
+    "php": ">=7.1",
+    "crystlbrd/values": "0.1.0"
+  },
+  "autoload": {
+    "psr-4": {
+      "Mini3ControllerExtensions\\Router\\": "src/"
+    }
+  }
+}
