@@ -24,6 +24,23 @@ trait Router
     /// METHODS
 
     /**
+     * Translates an array to the GET string syntax
+     * @param array $get
+     * @return string
+     */
+    protected function buildGetString(array $get): string
+    {
+        $str = '';
+        $i = 0;
+        foreach ($get as $k => $v) {
+            $str .= ($i ? '&' : '?') . (!is_int($k) ? urlencode($k) . '=' : '') . urlencode($v);
+            $i++;
+        }
+
+        return $str;
+    }
+
+    /**
      * Caches the current URL
      */
     protected function cacheCurrentLocation(): void
@@ -128,11 +145,7 @@ trait Router
         $url = $opt['base'] . $url;
 
         // add GET parameters
-        $i = 0;
-        foreach ($get as $k => $v) {
-            $url .= ($i ? '&' : '?') . (!is_int($k) ? urlencode($k) . '=' : '') . urlencode($v);
-            $i++;
-        }
+        $url .= $this->buildGetString($get);
 
         // add anchor if required
         if ($opt['anchor']) {
