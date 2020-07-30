@@ -26,14 +26,16 @@ trait Router
     /**
      * Translates an array to the GET string syntax
      * @param array $get
+     * @param bool $encodeParameterValues
+     * @param bool $encodeParameterKeys
      * @return string
      */
-    protected function buildGetString(array $get): string
+    protected function buildGetString(array $get, bool $encodeParameterValues = true,  bool $encodeParameterKeys = true): string
     {
         $str = '';
         $i = 0;
         foreach ($get as $k => $v) {
-            $str .= ($i ? '&' : '?') . (!is_int($k) ? urlencode($k) . '=' : '') . urlencode($v);
+            $str .= ($i ? '&' : '?') . (!is_int($k) ? ($encodeParameterKeys ? urlencode($k) : $k) . '=' : '') . ($encodeParameterValues ? urlencode($v) : $v);
             $i++;
         }
 
@@ -133,9 +135,11 @@ trait Router
         // OPTIONS
 
         $opt = ArrVal::merge([
-            'base' => URL,      // Baselink
-            'anchor' => null,   // URL anchor (/some/url#anchor)
-            'status' => 302     // HTTP Status for relocating (default: 302)
+            'base' => URL,                      // Baselink
+            'anchor' => null,                   // URL anchor (/some/url#anchor)
+            'status' => 302,                    // HTTP Status for relocating (default: 302),
+            'encode_parameter_keys' => true,    // Encode GET-Parameters in the redirect URL
+            'encode_parameter_values' => true   // Encode GET-Parameters in the redirect URL
         ], $options);
 
 
@@ -145,7 +149,7 @@ trait Router
         $url = $opt['base'] . $url;
 
         // add GET parameters
-        $url .= $this->buildGetString($get);
+        $url .= $this->buildGetString($get, $opt['encode_parameter_values'], $opt['encode_parameter_keys']);
 
         // add anchor if required
         if ($opt['anchor']) {
